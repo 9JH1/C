@@ -4,7 +4,6 @@
 
 #define MAX_ARRAY_LENGTH 100
 
-
 // ( TO_BE_SEARCHED | TO_BE_RETURNED | TO_BE_SEARCHED_FOR ) => VALUE_STRING
 #define dict(array1,array2,key) dict_pointer(array1,array2,sizeof(array2)/sizeof(array2[0]),key)
 char* dict_pointer(char array1[][MAX_ARRAY_LENGTH],char array2[][MAX_ARRAY_LENGTH],size_t length,char *key){
