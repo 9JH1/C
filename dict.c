@@ -41,7 +41,7 @@ int main(){
 		"idk like 1999 or somthin", 
 		"FUCKIN WAGOON",
 	};
-	char *indexOf = dict(array_keys,array_values,"Type");
+	char *indexOf = dict(array_keys,array_values,"Year");
 	printf("%s\n",indexOf);
 	return 0;
 }

@@ -1,0 +1,24 @@
+#include <stdio.h>
+
+void render_color_text(
+		/*  FOREGROUND */
+		int foreground_r,
+		int foreground_g,
+		int foreground_b,
+
+		/*  BACKGROUND */
+		int background_r,
+		int background_g,
+		int background_b
+		){
+	/* concatanate into one string */
+	char *text = "Hello World";
+    printf("\033[38;2;%d;%d;%dm\033[48;2;%d;%d;%dm%s\033[0m\n",foreground_r, foreground_g, foreground_b, background_r, background_g, background_b, text);
+}
+
+
+
+int main(){
+	render_text_color(255,0,0,0,0,255);
+	return 0;
+}

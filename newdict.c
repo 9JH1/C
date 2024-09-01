@@ -47,7 +47,7 @@ int main(){
 			{"model", "type",  "color",       "year"},
 			{"HONDA", "sedan", "tardis_blue", "1997"}
 		};
-		char* out = betterDict(dict,"model");
+		char* out = betterDict(dict,"jlajkaj");
 		printf("%s\n",out);
 		return 0;
 }
