@@ -38,13 +38,13 @@ void render_color_text(
 
 int main(){
 	char array_buttons[][MAX_ARRAY_SIZE] = {
-		"Hello",
-		"Merry", 
-		"Jim",
+		"exit",
+		"refresh", 
+		"other button",
 
 	};
 	int array_buttons_index=0;
-	char *text_logo_space = "See You Tomorrow";
+	char *text_logo_space = "Simple Terminal Interfaces written in C";
 	int oldRow, oldCol;
 	while(1){
 		// loop forever
@@ -124,7 +124,7 @@ int main(){
 			}
 			fflush(stdout);
 			//print the center text line
-			char *main_center_text = "Good Morning!";
+			char *main_center_text = "Hello World";
 			int main_center_text_width = (w.ws_col-2-strlen(main_center_text))/2;
 			render_color_text(0,0,0,255,255,255," ");
 			for(int i=0;i<main_center_text_width;i++){
@@ -158,6 +158,7 @@ int main(){
 			// this lets us have another row of the terminal
 			char *bottom_text = "/path/to/somthing.example";
 			render_color_text(0,0,0,255,255,255,bottom_text);
+			int bottom_text_size = w.ws_col-1-strlen(bottom_text);
 			for(int i=0;i<w.ws_col-1-strlen(bottom_text);i++){
 				render_color_text(0,0,0,255,255,255," ");
 			}
