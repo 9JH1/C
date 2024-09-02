@@ -30,7 +30,11 @@ void render_color_text(
 	);
 }
 
-
+// add handler for when enter key is presed
+//  if enter key pressed take index from top and do action based off of index
+// use dicts? --- nah
+//
+// add a handler for when the arrow keys are pressed, also add more info down the bottom of the page
 
 int main(){
 	char array_buttons[][MAX_ARRAY_SIZE] = {
@@ -152,7 +156,9 @@ int main(){
 				render_color_text(0,0,0,255,255,255," ");
 			}
 			// this lets us have another row of the terminal
-			for(int i=0;i<w.ws_col-1;i++){
+			char *bottom_text = "/path/to/somthing.example";
+			render_color_text(0,0,0,255,255,255,bottom_text);
+			for(int i=0;i<w.ws_col-1-strlen(bottom_text);i++){
 				render_color_text(0,0,0,255,255,255," ");
 			}
 			render_color_text(0,0,0,255,255,255," \r");
