@@ -1,0 +1,47 @@
+#include "xolib.c"
+#include <stdio.h>
+#include <math.h>
+
+#define draw(array) (draw_pointer(array))
+void draw_pointer(int array[8]){
+	int counterIndex=0;
+	for(int i=0;i<3/*nine boxes ofc*/;i++){
+		// for each value;
+		for(int ii=0;ii<3;ii++){
+			// top row;
+			printc(0,0,0,255,255,255,"   ");
+			printf(" ");
+			
+		}
+		printf("\n");
+		for(int ii=0;ii<3;ii++){
+			counterIndex++;
+			// bottom roiw;
+			printc(0,0,0,255,255,255," ");
+			if(array[counterIndex]==0){
+				printc(0,0,0,255,255,255," ");
+			} else if(array[counterIndex]==1){
+				printc(0,0,255,255,255,255,"X");
+			} else if(array[counterIndex]==2){
+				printc(255,0,0,255,255,255,"O");
+			}
+			printc(0,0,0,255,255,255," ");
+			printf(" ");
+		}
+		printf("\n");
+				
+	}
+	printf("\n");
+}
+
+int main(){
+	int array[9]={
+	1, 2, 1,
+	2, 0, 2,
+	1, 2, 1,
+	};
+	// can be a value from 0-2
+	
+	draw(array);
+	return 0;
+};
