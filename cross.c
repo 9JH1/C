@@ -2,6 +2,14 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <time.h>
+
+
+#define CPU_TIME (getrusage(RUSAGE_SELF,&ruse), ruse.ru_utime.tv_sec + \
+  ruse.ru_stime.tv_sec + 1e-6 * \
+  (ruse.ru_utime.tv_usec + ruse.ru_stime.tv_usec))
+
+
 #define draw(array) (draw_pointer(array))
 int draw_pointer(int array[8]){
 	int counterIndex=-1;
@@ -14,38 +22,38 @@ int draw_pointer(int array[8]){
 			// top row;
 			char numberChar[20];
 			sprintf(numberChar, "%d", counterIndex+2+ii);
-			printc(0,0,0,255,255,255," ");
-			int alpha=150;
+			printc(0,0,0,255,255,255,"    ");
+			int alpha=0;
 			printc(alpha,alpha,alpha,255,255,255,numberChar);
-			printc(0,0,0,255,255,255," ");
-			printf(" ");
+			printc(0,0,0,255,255,255,"    ");
+			printf("   ");
 			
 		}
 		printf("\n");
 		for(int ii=0;ii<3;ii++){
 			counterIndex++;
 			// middle row;
-			printc(0,0,0,255,255,255," ");
+			printc(0,0,0,255,255,255,"    ");
 			if(array[counterIndex]==0){
 				printc(0,0,0,255,255,255," ");
 			} else if(array[counterIndex]==1){
-				printc(1,10,43,255,255,255,"X");
+				printc(0,0,255,255,255,255,"X");
 			} else if(array[counterIndex]==2){
 				printc(255,0,0,255,255,255,"O");
 			}
-			printc(0,0,0,255,255,255," ");
-			printf(" ");
+			printc(0,0,0,255,255,255,"    ");
+			printf("   ");
 		}
 		// print the bottom row
 		printf("\n");
 		for(int ii=0;ii<3;ii++){
-			printc(0,0,0,255,255,255,"   ");
-			printf(" ");
+			printc(0,0,0,255,255,255,"         ");
+			printf("   ");
 		}
 
 				
 	}
-	printf("\n");
+	printf("\n\n");
 	// check rows
 	for (int i = 0; i < 9; i += 3) {
     		if (array[i] != 0 && array[i] == array[i + 1] && array[i + 1] == array[i + 2]) {
@@ -89,10 +97,15 @@ int main(){
 	// can be a value from 0-i
 	int turn=1;
 	int isClear=0;
+	char *players[256]={};
+	players[0] = take_full_input("Enter Player One Name: ",256);
+	players[1] = take_full_input("Enter Player Two Name: ",256);
+    
+    	clock_t tic = clock();
 	// 1=X 2=O
 	draw(array);
 	while(1){
-		printf("Player %d's turn\n",turn);
+		printf("%s's turn\n",players[turn-1]);
 		char* input=take_full_input("Enter A Box: ",4);
 		if(strcmp(input,"hl")==0){
 			printf("Guide:\n123\n456\n789\nenter a number corasponding to the unit you want to tag,\n");
@@ -121,15 +134,15 @@ int main(){
 			if(isClear==1){
 					system("clear");
 					int result = draw(array);
-					if(result==1){
-						printf("Player 1 Has Won!!\n");
-						exit(0);
-					} else if(result==2){
-						printf("Player 2 has Won!!\n");
-						exit(0);
-					} else if(result==0){
-						printf("Players Have Tied\n");
-						exit(0);
+					if(result==4){
+					
+					} else if (result==0){
+						printf("Tie!\n");
+						break;
+						
+					} else  {
+						printf("%s Has Won!!",players[result-1]);
+						break;
 					}
 				}
 			
@@ -138,5 +151,8 @@ int main(){
 
 	}
 
+    	clock_t toc = clock();
+
+    	printf("Elapsed: %f seconds\n", (double)(toc - tic) / CLOCKS_PER_SEC);	
 	return 0;
 }
