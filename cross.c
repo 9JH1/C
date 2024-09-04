@@ -89,19 +89,19 @@ int draw_pointer(int array[8]){
 
 int main(){
 	system("clear");
-	int array[9]={
-	0, 0, 0,
-	0, 0, 0,
-	0, 0, 0,
-	};
-	// can be a value from 0-i
+	//i can be a value from 0-i
+	int runCount=0;
 	int turn=1;
 	int isClear=0;
 	char *players[256]={};
+	
 	players[0] = take_full_input("Enter Player One Name: ",256);
 	players[1] = take_full_input("Enter Player Two Name: ",256);
-    
-    	clock_t tic = clock();
+	int playerScore[2]={0,0};
+	system("clear");
+rerun:
+	
+	int array[9]={};
 	// 1=X 2=O
 	draw(array);
 	while(1){
@@ -113,21 +113,21 @@ int main(){
 			int inputNumber = atoi(input)-1;
 			//array[inputNumber]=1;
 			if(turn==1){
-				if(array[inputNumber]==0){
+				if(array[inputNumber]==0 && inputNumber>9){
 					array[inputNumber]=1;
-					turn=2;		
+					turn=2;
 					isClear=1;
 				} else {
-					printf("Please pick an empty square\n");
+					printf("Please pick an empty square %d\n",inputNumber);
 					isClear=0;
 				}
 			} else if(turn==2){
-				if(array[inputNumber]==0){
+				if(array[inputNumber]==0 && inputNumber>9){
 					array[inputNumber]=2; 
 					turn=1;
 					isClear=1;
 				} else {
-					printf("Please pick an empty square\n");
+					printf("Please pick an empty square %d \n",inputNumber);
 					isClear=0;
 				}
 			}
@@ -141,18 +141,20 @@ int main(){
 						break;
 						
 					} else  {
-						printf("%s Has Won!!",players[result-1]);
+						printf("%s Has Won!!\n",players[result-1]);
+						playerScore[result-1] = playerScore[result-1]+1;
 						break;
 					}
 				}
-			
-
 		}
 
 	}
-
-    	clock_t toc = clock();
-
-    	printf("Elapsed: %f seconds\n", (double)(toc - tic) / CLOCKS_PER_SEC);	
-	return 0;
+	runCount++;
+	char *input=take_full_input("Play Again? [y/N]: ",3);
+	if(strcmp(input,"y")==0 || strcmp(input,"Y")==0){
+		goto rerun;
+	} else {
+		printf("\nPlayed %d games\n %s Score: %d\n %s Score: %d\n",runCount,players[0],playerScore[0],players[1],playerScore[1]);
+		return 0;
+	}
 }
