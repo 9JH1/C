@@ -4,6 +4,7 @@
 #include <string.h>
 #include <termios.h>
 #include <unistd.h>
+#include <signal.h>
 
 #define MAX_ARRAY_SIZE 100
 
@@ -31,13 +32,7 @@ int awaitInputNoEnter()
 }
 
 void printc(
-	int foreground_r,
-	int foreground_g,
-	int foreground_b,
-	int background_r,
-	int background_g,
-	int background_b,
-	
+	int foreground_r,int foreground_g,int foreground_b,int background_r,int background_g,int background_b,
 	char *text)
 {
 	/* concatanate into one string */
@@ -154,4 +149,94 @@ int contains_pointer(char *text, char array[][MAX_ARRAY_SIZE], size_t array_size
 		}
 	}
 	return 1;
+}
+
+
+
+void enable_mouse_reporting() {
+    printf("\033[?1003h"); // Enable mouse reporting
+    fflush(stdout);
+}
+
+void disable_mouse_reporting() {
+    printf("\033[?1003l"); // Disable mouse reporting
+    fflush(stdout);
+}
+
+void set_raw_mode(int fd) {
+    struct termios term;
+    tcgetattr(fd, &term);
+    term.c_lflag &= ~(ECHO | ICANON); // Disable canonical mode and echo
+    tcsetattr(fd, TCSANOW, &term);
+}
+
+void reset_mode(int fd) {
+    struct termios term;
+    tcgetattr(fd, &term);
+    term.c_lflag |= (ECHO | ICANON); // Enable canonical mode and echo
+    tcsetattr(fd, TCSANOW, &term);
+}
+
+void quitHandler(){
+    disable_mouse_reporting();
+    reset_mode(STDIN_FILENO);
+    exit(0);
+}
+
+int awaitMouseClick() {
+    set_raw_mode(STDIN_FILENO);
+    enable_mouse_reporting();
+	signal(SIGINT, quitHandler);
+    fflush(stdout);
+    while (1) {
+        char buf[6];
+        ssize_t len = read(STDIN_FILENO, buf, sizeof(buf));
+        if (len > 0 && buf[0] == '\033' && buf[1] == '[') {
+            if (buf[2] == 'M') {
+                if (len >= 6) {
+                    int button = buf[3] - ' ' - 1; // Mouse button code
+                    int x = buf[4] - ' ' - 1; // Convert from ASCII to coordinate
+                    int y = buf[5] - ' ' - 1; // Convert from ASCII to coordinate
+
+                    // Button codes: 0 = left, 1 = middle, 2 = right
+                    if (button == 0 || button == 1 || button == 2) {
+                        return x,y;
+                    }
+                }
+            }
+        }
+    }
+
+    disable_mouse_reporting();
+    reset_mode(STDIN_FILENO);
+
+    return 0;
+}
+
+void awaitClickPreciseStatic(int xF, int yF, void (*callHandler)()){
+    set_raw_mode(STDIN_FILENO);
+    enable_mouse_reporting();
+    fflush(stdout);
+    while (1) {
+        fflush(stdout);
+        char buf[6];
+        ssize_t len = read(STDIN_FILENO, buf, sizeof(buf));
+        if (len > 0 && buf[0] == '\033' && buf[1] == '[') {
+            if (buf[2] == 'M') {
+                if (len >= 6) {
+                    int button = buf[3] - ' ' - 1; // Mouse button code
+                    int x = buf[4] - ' ' - 1; // Convert from ASCII to coordinate
+                    int y = buf[5] - ' ' - 1; // Convert from ASCII to coordinate
+                    if (button == 0 || button == 1 || button == 2) {
+                        if(xF == x && yF == y){
+                            disable_mouse_reporting();
+                            reset_mode(STDIN_FILENO);
+                            callHandler();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
