@@ -113,7 +113,7 @@ rerun:
 			int inputNumber = atoi(input)-1;
 			//array[inputNumber]=1;
 			if(turn==1){
-				if(array[inputNumber]==0 && inputNumber>9){
+				if(array[inputNumber]==0 && inputNumber<9){
 					array[inputNumber]=1;
 					turn=2;
 					isClear=1;
@@ -122,7 +122,7 @@ rerun:
 					isClear=0;
 				}
 			} else if(turn==2){
-				if(array[inputNumber]==0 && inputNumber>9){
+				if(array[inputNumber]==0 && inputNumber<9){
 					array[inputNumber]=2; 
 					turn=1;
 					isClear=1;
