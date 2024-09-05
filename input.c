@@ -14,7 +14,7 @@ int awaitInputNoEnter(){
 		// take a char
 		keycode = getchar();
 		tcsetattr(STDIN_FILENO,TCSANOW,&oldT);
-		return keycode;
+		return (char)keycode;
 	}
 }
 
