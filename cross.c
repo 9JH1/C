@@ -4,12 +4,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
-#define CPU_TIME (getrusage(RUSAGE_SELF,&ruse), ruse.ru_utime.tv_sec + \
-  ruse.ru_stime.tv_sec + 1e-6 * \
-  (ruse.ru_utime.tv_usec + ruse.ru_stime.tv_usec))
-
-
 #define draw(array) (draw_pointer(array))
 int draw_pointer(int array[8]){
 	int counterIndex=-1;
